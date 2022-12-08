@@ -37,7 +37,8 @@ const Home = () => {
                                     } */}
                                     <Title className={classes.title}>Shift a Life <br /> Foundation</Title>
                                     <Text className={classes.text}>
-                                        We help raise funds through donations in the Near Blockchain environment to help fight calamities within Kenya.
+                                        We help raise funds through donations in the Near Blockchain environment to help fight calamities within Kenya and world at large.
+
                                         <br />
                                         <br />
                                         Our aim is to provide a clear and easy to use platform to help you <span className={classes.bold}>shift a life</span>.
