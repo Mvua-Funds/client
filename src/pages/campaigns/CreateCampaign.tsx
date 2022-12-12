@@ -12,15 +12,24 @@ import { showNotification } from '@mantine/notifications';
 import { nanoid } from 'nanoid';
 import { ShiftALifeFunctionCall } from '../../configs/nearutils';
 import SelectTokenModal from '../../components/common/SelectTokenModal';
+import { getCauses, connectWallet } from '../../configs/near/utils';
+import { useEffect } from 'react';
 
 
 const CreateCampaign = () => {
 
   const [loading, setLoading] = useState(false)
+  const [causes, setCauses] = useState<null | any>([])
   const [openModal, setOpenModal] = useState(false)
   const [selectedToken, setSelectedToken] = useState(NEAR_OBJECT)
 
   const theme = useMantineTheme()
+
+  const loadCauses = () => {
+    getCauses().then((res: any) => {
+      setCauses(res)
+    }).catch((err: any) => { })
+  }
 
   const form = useForm({
     initialValues: {
@@ -102,6 +111,12 @@ const CreateCampaign = () => {
     }
   }
 
+  const isSignedIn = window?.walletConnection?.isSignedIn()
+
+  useEffect(() => {
+    loadCauses()
+  }, [])
+
   return (
     <>
       <Helmet>
@@ -127,9 +142,8 @@ const CreateCampaign = () => {
                       // borderColor: getTheme(theme) ? theme.colors.dark[4] : "#242a49",
                       // borderWidth: "2px"
                     }
-                  }} data={[
-                    { value: "Tree planting", label: "Tree planting" }
-                  ]} {...form.getInputProps('cause')} />
+                  }} data={causes.map((cause: any) => ({ value: cause?.title, label: cause?.title }))}
+                    {...form.getInputProps('cause')} />
                   <Textarea minRows={5} placeholder="Describe the campaign" label="Description" radius="md" styles={{
                     input: {
                       // borderColor: getTheme(theme) ? theme.colors.dark[4] : "#242a49",
@@ -207,7 +221,12 @@ const CreateCampaign = () => {
                   </Grid>
 
                   <Group align="center" position='center'>
-                    <Button type='submit' leftIcon={<IconSpeakerphone />} color="purple" radius="xl" px="xl">Create Campaign</Button>
+                    {
+                      !isSignedIn ? <Button radius="xl" px="xl" color="purple" onClick={connectWallet}>Connect wallet</Button>
+                        :
+                        <Button type='submit' leftIcon={<IconSpeakerphone />} color="purple" radius="xl" px="xl">Create Campaign</Button>
+                    }
+
                   </Group>
                 </Stack>
               </form>

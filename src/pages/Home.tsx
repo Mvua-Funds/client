@@ -1,16 +1,17 @@
 import React from 'react'
 // COlor: #242a49
 
-import { Box, Button, Container, Grid, Group, Stack, Text, Title, useMantineTheme, Image, SegmentedControl, Paper, Center } from '@mantine/core';
+import { Box, Button, Container, Grid, Group, Stack, Text, Title, useMantineTheme } from '@mantine/core';
 import bodyStyles from '../components/styles/bodyStyles';
-import { getTheme } from '../configs/appfunctions';
 import { Helmet } from 'react-helmet';
-import { SEPARATOR, APP_NAME } from '../configs/appconfig';
-import { Calendar } from '@mantine/dates';
-import { IconCalendarEvent, IconSpeakerphone } from '@tabler/icons';
+import {  APP_NAME } from '../configs/appconfig';
 import HomeBannerCalendar from '../components/calendar/HomeBannerCalendar';
+<<<<<<< HEAD
 import HomeHeroCreateBtn from '../components/common/HomeHeroCreateBtn';
 import Campaign from '../components/recents/Campaign';
+=======
+import HomeHeroCreateBtn, { HomeHeroDonateBtn } from '../components/common/HomeHeroCreateBtn';
+>>>>>>> 3d414d130305f2cd063ea01189a8cd274ca7f6a7
 
 const Home = () => {
     const theme = useMantineTheme()
@@ -18,7 +19,8 @@ const Home = () => {
     return (
         <>
             <Helmet>
-                <title> {APP_NAME} - Make change today</title>
+                <title> {APP_NAME} - Donate today, save a life.</title>
+                <meta name='description' content='We help raise funds through donations in the Near Blockchain environment to help fight calamities within Kenya and world at large.' />
             </Helmet>
             <Container py="xs" size="xl">
                 <div>
@@ -46,7 +48,7 @@ const Home = () => {
                                         Our aim is to provide a clear and easy to use platform to help you <span className={classes.bold}>shift a life</span>.
                                     </Text>
                                     <Group mt="xl">
-                                        <Button radius="xl" px="xl" color="purple">Donate Today</Button>
+                                        <HomeHeroDonateBtn />
                                         <HomeHeroCreateBtn />
                                     </Group>
                                 </Stack>

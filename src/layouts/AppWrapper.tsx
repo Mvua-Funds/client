@@ -32,7 +32,7 @@ const navlinks = [
 ]
 
 // Text color for light mode: #1f1f30
-
+ 
 export default function AppWrapper(props: any) {
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(false);
