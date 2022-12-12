@@ -10,6 +10,7 @@ import { Calendar } from '@mantine/dates';
 import { IconCalendarEvent, IconSpeakerphone } from '@tabler/icons';
 import HomeBannerCalendar from '../components/calendar/HomeBannerCalendar';
 import HomeHeroCreateBtn from '../components/common/HomeHeroCreateBtn';
+import Campaign from '../components/recents/Campaign';
 
 const Home = () => {
     const theme = useMantineTheme()
@@ -54,7 +55,9 @@ const Home = () => {
                         <Grid.Col md={5} className='fixed-height' py="xl">
                             <HomeBannerCalendar />
                         </Grid.Col>
+                        
                     </Grid>
+                    <Campaign />
                 </div>
             </Container>
         </>
