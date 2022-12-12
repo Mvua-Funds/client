@@ -3,6 +3,8 @@ import { Calendar, CalendarBase } from '@mantine/dates'
 import { IconCalendarEvent, IconSpeakerphone } from '@tabler/icons'
 import React from 'react'
 import { useState } from 'react';
+import CampaignsCustomCalendar from './CampaignsCustomCalendar';
+import EventsCustomCalendar from './EventsCustomCalendar';
 
 const HomeBannerCalendar = () => {
     const [activeSegment, setActiveSegment] = useState('events')
@@ -36,12 +38,12 @@ const HomeBannerCalendar = () => {
                 <Paper p="xs" radius="lg">
                     {
                         activeSegment === 'events' ? (
-                            <Calendar fullWidth month={new Date()} />
+                            <EventsCustomCalendar custom={false} allowdatechange={false} />
                         ) : null
                     }
                     {
                         activeSegment === 'campaigns' ? (
-                            <Calendar fullWidth month={new Date(2022, 10, 17)} />
+                            <CampaignsCustomCalendar custom={false} allowdatechange={false} />
                         ) : null
                     }
                 </Paper>

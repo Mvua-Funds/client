@@ -1,7 +1,8 @@
-import { Paper, Box, Stack, Title, Badge, Button, Group, Text, Anchor } from '@mantine/core'
+import { Paper, Box, Stack, Title, Badge, Button, Group, Text, Anchor, Tooltip } from '@mantine/core'
 import { IconCashBanknote, IconCalendar } from '@tabler/icons'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { getTimezone } from '../../configs/appfunctions'
 import bodyStyles from '../styles/bodyStyles'
 
 const CampaignCard = (props: any) => {
@@ -44,15 +45,19 @@ const CampaignCard = (props: any) => {
                         <Anchor to={`/campaigns/${details?.id}`} component={Link} mx="auto">
                             <Button sx={{ width: "fit-content" }} radius="xl" px="xl" color="indigo" leftIcon={<IconCashBanknote />}>Donate</Button>
                         </Anchor>
-                        <Group position='apart' align="center">
-                            <Group align="center">
-                                <IconCalendar color="white" />
-                                <Text size="xs" color="white">{details?.start_date}</Text>
-                            </Group>
-                            <Group align="center">
-                                <IconCalendar color="white" />
-                                <Text size="xs" color="white">{details?.end_date}</Text>
-                            </Group>
+                        <Group position='apart' align="center" spacing={0}>
+                            <Tooltip label={getTimezone(details.start_date)} color="lime" withArrow>
+                                <Group align="center" spacing={2}>
+                                    <IconCalendar color="white" />
+                                    <Text size="xs" color="white">{new Date(details?.start_date).toDateString()}</Text>
+                                </Group>
+                            </Tooltip>
+                            <Tooltip label={getTimezone(details.end_date)} color="lime" withArrow>
+                                <Group align="center" spacing={2}>
+                                    <IconCalendar color="white" />
+                                    <Text size="xs" color="white">{new Date(details?.end_date).toDateString()}</Text>
+                                </Group>
+                            </Tooltip>
                         </Group>
                     </Stack>
                 </Box>

@@ -1,15 +1,21 @@
+import 'regenerator-runtime/runtime'
+
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { initContract } from "./configs/near/utils";
 import reportWebVitals from "./reportWebVitals";
 
+import * as buffer from "buffer"
+
 declare global {
-  interface Window { nearInitPromise: any; walletConnection: any}
+  interface Window { nearInitPromise: any; walletConnection: any, contract: any}
 }
 
+window.Buffer = buffer.Buffer;
+
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root")! as HTMLElement
 );
 
 // root.render(

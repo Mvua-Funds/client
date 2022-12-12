@@ -1,7 +1,8 @@
-import { Paper, Box, Stack, Title, Badge, Button, Group, Text, Anchor } from '@mantine/core'
+import { Paper, Box, Stack, Title, Badge, Button, Group, Text, Anchor, Tooltip } from '@mantine/core'
 import { IconCashBanknote, IconCalendar } from '@tabler/icons'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { getTimezone } from '../../configs/appfunctions'
 import bodyStyles from '../styles/bodyStyles'
 
 const EventCard = (props: any) => {
@@ -41,14 +42,16 @@ const EventCard = (props: any) => {
                     <Stack className='w-100' spacing={10}>
                         <Title order={2} color="white" sx={{ textTransform: "capitalize" }} align="center">{details?.title}</Title>
                         <Badge sx={{ width: "fit-content" }} mx="auto" variant='light'>Target: {details?.current} / {details?.target} {details?.token}</Badge>
-                        <Anchor to={`/events/${details?.id}`} component={Link}  mx="auto">
+                        <Anchor to={`/events/${details?.id}`} component={Link} mx="auto">
                             <Button sx={{ width: "fit-content" }} radius="xl" px="xl" color="indigo" leftIcon={<IconCashBanknote />}>Donate</Button>
                         </Anchor>
                         <Group position='apart' align="center">
-                            <Group align="center">
-                                <IconCalendar color="white" />
-                                <Text size="xs" color="white">{details?.date}</Text>
-                            </Group>
+                            <Tooltip label={getTimezone(details.date)} color="lime" withArrow>
+                                <Group align="center">
+                                    <IconCalendar color="white" />
+                                    <Text size="xs" color="white">{new Date(details?.date).toDateString()}</Text>
+                                </Group>
+                            </Tooltip>
                         </Group>
                     </Stack>
                 </Box>

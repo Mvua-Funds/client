@@ -1,57 +1,56 @@
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { SEPARATOR, APP_NAME } from '../../configs/appconfig'
 import { Helmet } from 'react-helmet';
-import { Grid, Container, Box, Button, Center, Group, Paper, Stack, Title, Image, Text, Card, Badge } from '@mantine/core';
-import { Calendar } from '@mantine/dates';
-import { CustomCalendar } from '../../components/calendar/CustomCalendar';
+import { Grid, Container, Box, Button, Center, Group, Paper, Stack, Title, Image, Text, Pagination } from '@mantine/core';
+import CampaignsCustomCalendar from '../../components/calendar/CampaignsCustomCalendar';
 import { getTheme } from '../../configs/appfunctions';
 import bodyStyles from '../../components/styles/bodyStyles';
-import { IconCalendar, IconCashBanknote } from '@tabler/icons';
-import { nanoid } from 'nanoid'
 import CampaignCard from '../../components/activities/CampaignCard';
+import { ShiftALifeViewFunctionCall } from '../../configs/nearutils';
 
-const campaigns = [
-  {
-    id: nanoid(),
-    title: 'Kisii Tree Planting Campaign',
-    target: 5000,
-    current: 500,
-    token: "Near",
-    start_date: "2022 Dec 17",
-    end_date: "2023 April 17",
-  },
-  {
-    id: nanoid(),
-    title: 'School repairing Campaign West Pokot',
-    target: 20000,
-    current: 1000,
-    token: "Near",
-    start_date: "2022 Dec 05",
-    end_date: "2023 July 30",
-  },
-  {
-    id: nanoid(),
-    title: 'Lunch Campaign Wajir',
-    target: 10000,
-    current: 1000,
-    token: "Dai",
-    start_date: "2022 Dec 05",
-    end_date: "2023 July 30",
-  },
-  {
-    id: nanoid(),
-    title: 'Lunch Campaign Wajir',
-    target: 10000,
-    current: 1000,
-    token: "Dai",
-    start_date: "2022 Dec 05",
-    end_date: "2023 July 30",
-  }
-]
 
 const Campaigns = () => {
 
+  const [campaigns, setCampaigns] = useState<null | any>([])
+  const [count, setCount] = useState(0)
+  const [limit, setLimit] = useState(8)
+  const [page, setPage] = useState(1)
+
+  const no_of_pages = Math.ceil(count / limit)
+
   const { classes, theme } = bodyStyles()
+
+  const getCampaigns = () => {
+    const wallet = window.walletConnection
+    if (wallet) {
+      ShiftALifeViewFunctionCall(wallet, {
+        methodName: 'get_campaigns',
+        args: { page: page, limit: limit }
+      }).then((res: any) => {
+        const campaigns_ = campaigns
+        const results: any = res?.results
+        const merged = campaigns_.concat(results).filter((obj: any, index: any, self: any) =>
+          index === self.findIndex((obj2: any) => (
+            obj.id === obj2.id
+          ))
+        );
+        setCampaigns(merged)
+        setCount(res?.count)
+      }).catch((e: any) => {
+        console.error("Error: ", e)
+      })
+    }
+  }
+
+  const wait = useMemo(() => {
+    return {
+      page
+    }
+  }, [page])
+
+  useEffect(() => {
+    getCampaigns()
+  }, [wait])
 
   return (
     <>
@@ -88,7 +87,7 @@ const Campaigns = () => {
           <Grid.Col md={5} className='fixed-height' py="xl">
             <Center className='h-100'>
               <Paper p="xs" radius="lg">
-                <Calendar fullWidth month={new Date()} />
+                <CampaignsCustomCalendar custom={false} allowdatechange={false} />
               </Paper>
             </Center>
           </Grid.Col>
@@ -100,7 +99,7 @@ const Campaigns = () => {
               Preview all the campaigns on the calendar
             </Text>
           </Stack>
-          <CustomCalendar />
+          <CampaignsCustomCalendar custom={true} allowdatechange={true} />
         </Box>
 
         <Stack spacing={0} my="xl">
@@ -109,15 +108,21 @@ const Campaigns = () => {
             Campaigns are long term activities that we carry out in relation to making donations to help <span className={classes.bold}>Shift a Life</span> of somebody or a community.
           </Text>
         </Stack>
-        <Grid>
+        <Group position='right'>
+          <Pagination total={no_of_pages} page={page} onChange={page => setPage(page)} />
+        </Group>
+        <Grid my="md">
           {
             campaigns.map((c: any, i: any) => (
-              <Grid.Col md={3} key={`campaign_${c.id}`}>
+              <Grid.Col md={3} key={`ds_campaign_${c.id}`}>
                 <CampaignCard details={c} />
               </Grid.Col>
             ))
           }
         </Grid>
+        <Group position='right'>
+          <Pagination total={no_of_pages} page={page} onChange={page => setPage(page)} />
+        </Group>
       </Container>
     </>
   )

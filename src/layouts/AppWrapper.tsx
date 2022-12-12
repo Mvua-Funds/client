@@ -13,6 +13,8 @@ import {
     Modal,
     Drawer,
     Anchor,
+    Stack,
+    Text,
 } from '@mantine/core';
 import CustomLinkComponent from '../components/common/CustomNavlink';
 import { getTheme } from '../configs/appfunctions';
@@ -21,6 +23,7 @@ import { connectWallet, disconnectWallet } from '../configs/near/utils';
 import CreateDropdown from '../components/common/CreateDropdown';
 import Footer from '../components/common/Footer';
 import { APP_NAME } from '../configs/appconfig';
+import { Link } from 'react-router-dom';
 
 const navlinks = [
     { to: "/", label: "Home" },
@@ -61,7 +64,21 @@ export default function AppWrapper(props: any) {
                                     color={theme.colors.gray[6]}
                                 />
                             </MediaQuery>
-                            <Title order={2}>SaL</Title>
+                            <Anchor component={Link} to="/" sx={{
+                                textDecoration: "none !important",
+                                ".lis": {
+                                    color: getTheme(theme) ? theme.colors.gray[1] : theme.colors.dark[8],
+                                    textDecoration: "none",
+                                    ":hover": {
+                                        textDecoration: "none !important"
+                                    }
+                                }
+                            }}>
+                                <Stack spacing={-10}>
+                                    <Title order={2} className="lis">SaL</Title>
+                                    <Text size="xs" className="lis">DONATE</Text>
+                                </Stack>
+                            </Anchor>
                             <Divider orientation='vertical' />
                             {
                                 getTheme(theme) ? (

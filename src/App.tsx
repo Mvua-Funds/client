@@ -1,4 +1,3 @@
-import { Button} from "@mantine/core";
 import { ThemeProvider } from "./ThemeProvider";
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
@@ -15,6 +14,7 @@ import Partners from './pages/partners/Partners';
 import BecomePartner from "./pages/partners/BecomePartner";
 import SingleEvent from './pages/events/SingleEvent';
 import SingleCampaign from './pages/campaigns/SingleCampaign';
+import TokenImport from "./pages/TokenImport";
 
 export default function App() {
 
@@ -24,6 +24,7 @@ export default function App() {
         <AppWrapper>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/import" element={<TokenImport />} />
             <Route path="/campaigns" element={<Campaigns />} />
             <Route path="/campaigns/:cid" element={<SingleCampaign />} />
             <Route path="/create/campaign" element={<CreateCampaign />} />

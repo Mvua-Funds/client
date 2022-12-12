@@ -27,8 +27,9 @@
     "cookies-next": "^2.1.1",
     "dayjs": "^1.11.6",
     "embla-carousel-react": "^7.0.5",
+    "moment-timezone": "^0.5.39",
     "nanoid": "^4.0.0",
-    "near-api-js": "^1.1.0",
+    "near-api-js": "0.45.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
@@ -64,6 +65,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-helmet": "^6.1.6"
+    "@types/react-helmet": "^6.1.6",
+    "@types/regenerator-runtime": "^0.13.1"
   }
 }

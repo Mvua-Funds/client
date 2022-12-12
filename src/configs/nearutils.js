@@ -51,11 +51,12 @@ export const resolveToken = (tokenId) => {
   return tokenId.split('.')[0]
 }
 
-export const getUSD = (price, bal) => {
-  if (price && bal && price !== 'N/A') {
-    return new BigNumber((bal)).multipliedBy(price).toFixed(2)
-  }
-  return 'N/A'
+export const getUSD = (amt, price) => {
+  return price * amt
+}
+
+export const getAmtString = (amt, decimals) => {
+  return new BigNumber(amt).multipliedBy(10 ** decimals).toFixed();
 }
 
 export const getTokenPrice = async (tokenId) => {
@@ -114,7 +115,7 @@ export const getUserWalletTokens = async () => {
     });
 };
 
-export const MvuaFunctionCall = (wallet, {
+export const ShiftALifeFunctionCall = (wallet, {
   methodName,
   args,
   gas,
@@ -131,7 +132,7 @@ export const MvuaFunctionCall = (wallet, {
     );
 };
 
-export const MvuaViewFunctionCall = (wallet, {
+export const ShiftALifeViewFunctionCall = (wallet, {
   methodName,
   args,
 }) => {
@@ -151,4 +152,23 @@ export const convertResultToText = (response) => {
     response.result.map((x) => String.fromCharCode(x)).join('')
   );
   return res
+}
+
+export const convertTimestamp = (timestamp) => {
+  const date = new Date(timestamp/1000000);
+  return date.toDateString()
+}
+
+
+export const makeArray = (object) => {
+  const array = []
+  if (object) {
+    Object.keys(object).map(key => {
+      array.push({
+        name: key,
+        votes: object[key]
+      })
+    })
+  }
+  return array
 }

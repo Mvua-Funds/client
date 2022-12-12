@@ -1,61 +1,65 @@
-import { Container, Grid, Box, Stack, Title, Group, Button, Text, Image, Paper, Center } from '@mantine/core';
-import React from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
+import { Container, Grid, Box, Stack, Title, Group, Button, Text, Image, Paper, Center, Pagination } from '@mantine/core';
 import { Helmet } from 'react-helmet';
-import HomeBannerCalendar from '../../components/calendar/HomeBannerCalendar';
 import { SEPARATOR, APP_NAME } from '../../configs/appconfig';
 import bodyStyles from '../../components/styles/bodyStyles';
 import { getTheme } from '../../configs/appfunctions';
-import { Calendar } from '@mantine/dates';
-import { CustomCalendar } from '../../components/calendar/CustomCalendar';
+import EventsCustomCalendar from '../../components/calendar/EventsCustomCalendar';
 
-import { nanoid } from 'nanoid'
 import EventCard from '../../components/activities/EventCard';
+import { ShiftALifeViewFunctionCall } from '../../configs/nearutils';
 
-const events = [
-  {
-    id: nanoid(),
-    title: 'Kisii Tree Planting Campaign',
-    target: 5000,
-    current: 500,
-    token: "Near",
-    date: "2022 Dec 17",
-  },
-  {
-    id: nanoid(),
-    title: 'School repairing Campaign West Pokot',
-    target: 20000,
-    current: 1000,
-    token: "Near",
-    date: "2022 Dec 05",
-  },
-  {
-    id: nanoid(),
-    title: 'Lunch Campaign Wajir',
-    target: 10000,
-    current: 1000,
-    token: "Dai",
-    date: "2022 Dec 05",
-  },
-  {
-    id: nanoid(),
-    title: 'Lunch Campaign Wajir',
-    target: 10000,
-    current: 1000,
-    token: "Dai",
-    date: "2022 Dec 05",
-  }
-]
 
 const Events = () => {
 
+  const [events, setEvents] = useState<null | any>([])
+  const [count, setCount] = useState(0)
+  const [limit, setLimit] = useState(8)
+  const [page, setPage] = useState(1)
+
+  const no_of_pages = Math.ceil(count / limit)
+
   const { classes, theme } = bodyStyles()
+
+  const getEvents = () => {
+    const wallet = window.walletConnection
+    if (wallet) {
+      ShiftALifeViewFunctionCall(wallet, {
+        methodName: 'get_events',
+        args: { page: page, limit: limit }
+      }).then((res: any) => {
+        console.log("Response: ", res)
+        const events_ = events
+        const results: any = res?.results
+        const merged = events_.concat(results).filter((obj: any, index: any, self: any) =>
+          index === self.findIndex((obj2: any) => (
+            obj.id === obj2.id
+          ))
+        );
+        setEvents(merged)
+        setCount(res?.count)
+      }).catch((e: any) => {
+        console.error("Error: ", e)
+      })
+    }
+  }
+
+  const wait = useMemo(() => {
+    return {
+      page
+    }
+  }, [page])
+
+  useEffect(() => {
+    getEvents()
+  }, [wait])
 
   return (
     <>
       <Helmet>
         <title>Events {SEPARATOR} {APP_NAME}</title>
       </Helmet>
-      <Container py="xs" size="xl"  sx={{ marginBottom: "70px" }}>
+      <Container py="xs" size="xl" sx={{ marginBottom: "70px" }}>
         <Grid>
           <Grid.Col className='fixed-height position-relative' md={7}>
             <Box py="xl" sx={{
@@ -85,7 +89,7 @@ const Events = () => {
           <Grid.Col md={5} className='fixed-height' py="xl">
             <Center className='h-100'>
               <Paper p="xs" radius="lg">
-                <Calendar fullWidth month={new Date()} />
+                <EventsCustomCalendar custom={false} allowdatechange={false} />
               </Paper>
             </Center>
           </Grid.Col>
@@ -97,7 +101,7 @@ const Events = () => {
               Preview all the events on the calendar
             </Text>
           </Stack>
-          <CustomCalendar />
+          <EventsCustomCalendar custom={true} allowdatechange={true} />
         </Box>
         <Stack spacing={0} my="xl">
           <Title className={classes.subtitle}>Make Donations</Title>
@@ -105,15 +109,21 @@ const Events = () => {
             Events are short term activities that we carry out in relation to making donations to help <span className={classes.bold}>Shift a Life</span> of somebody or a community.
           </Text>
         </Stack>
+        <Group position='right'>
+          <Pagination total={no_of_pages} page={page} onChange={page => setPage(page)} />
+        </Group>
         <Grid>
           {
             events.map((c: any, i: any) => (
-              <Grid.Col md={3} key={`campaign_${c.id}`}>
+              <Grid.Col md={3} key={`event_a_${c.id}`}>
                 <EventCard details={c} />
               </Grid.Col>
             ))
           }
         </Grid>
+        <Group position='right'>
+          <Pagination total={no_of_pages} page={page} onChange={page => setPage(page)} />
+        </Group>
       </Container>
     </>
   )

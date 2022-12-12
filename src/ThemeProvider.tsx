@@ -4,6 +4,7 @@ import { NotificationsProvider } from '@mantine/notifications';
 
 import { getCookie, setCookie } from 'cookies-next'
 import { THEME_COOKIE } from './configs/appsettings';
+import { ModalsProvider } from "@mantine/modals";
 
 export const theme: MantineThemeOverride = {
   colorScheme: "dark",
@@ -27,10 +28,12 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-      <MantineProvider withGlobalStyles withNormalizeCSS theme={{colorScheme: colorScheme, fontFamily: 'NeueMontrealBook,Arial,sans-serif'}}>
-        <NotificationsProvider>
-          {children}
-        </NotificationsProvider>
+      <MantineProvider withGlobalStyles withNormalizeCSS theme={{ colorScheme: colorScheme, fontFamily: 'NeueMontrealBook,Arial,sans-serif' }}>
+        <ModalsProvider>
+          <NotificationsProvider>
+            {children}
+          </NotificationsProvider>
+        </ModalsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );

@@ -9,6 +9,7 @@ import { SEPARATOR, APP_NAME } from '../configs/appconfig';
 import { Calendar } from '@mantine/dates';
 import { IconCalendarEvent, IconSpeakerphone } from '@tabler/icons';
 import HomeBannerCalendar from '../components/calendar/HomeBannerCalendar';
+import HomeHeroCreateBtn from '../components/common/HomeHeroCreateBtn';
 
 const Home = () => {
     const theme = useMantineTheme()
@@ -44,7 +45,7 @@ const Home = () => {
                                     </Text>
                                     <Group mt="xl">
                                         <Button radius="xl" px="xl" color="purple">Donate Today</Button>
-                                        <Button radius="xl" px="xl" color="purple" variant="outline">Create Event / Campaign</Button>
+                                        <HomeHeroCreateBtn />
                                     </Group>
                                 </Stack>
                             </Box>

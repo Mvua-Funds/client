@@ -5,7 +5,7 @@ import { IconSpeakerphone, IconCalendarEvent } from '@tabler/icons';
 
 
 
-const CustomLinkComponentDropdown = (props: any) => {
+export const CustomLinkComponentDropdown = (props: any) => {
     const { details: { to, label, icon }, click } = props
     const theme = useMantineTheme()
 
@@ -42,9 +42,9 @@ function CreateDropdown() {
             </Menu.Target>
 
             <Menu.Dropdown>
-                <Menu.Label>Application</Menu.Label>
-                <CustomLinkComponentDropdown click={() => setOpen(false)} details={{ to: "/create/event", label: "Create Event", icon: <IconCalendarEvent size={14} /> }} />
-                <CustomLinkComponentDropdown click={() => setOpen(false)} details={{ to: "/create/campaign", label: "Create Campaign", icon: <IconSpeakerphone size={14} /> }} />
+                <Menu.Label>SELECT</Menu.Label>
+                <CustomLinkComponentDropdown click={() => setOpen(false)} details={{ to: "/create/event", label: "Create Event", icon: <IconCalendarEvent size={18} color="indigo" /> }} />
+                <CustomLinkComponentDropdown click={() => setOpen(false)} details={{ to: "/create/campaign", label: "Create Campaign", icon: <IconSpeakerphone size={18} color="green" /> }} />
             </Menu.Dropdown>
         </Menu>
     );
