@@ -48,7 +48,7 @@ const CampaignDonations = (props: any) => {
             <Group position='right'>
                 <Pagination total={no_of_pages} page={page} onChange={page => setPage(page)} />
             </Group>
-            <ScrollArea>
+            <ScrollArea my="xl">
                 <Table verticalSpacing={16} fontSize="sm" striped>
                     <thead>
                         <tr>

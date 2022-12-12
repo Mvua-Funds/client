@@ -9,7 +9,7 @@ import { SEPARATOR, APP_NAME } from '../configs/appconfig';
 import { Calendar } from '@mantine/dates';
 import { IconCalendarEvent, IconSpeakerphone } from '@tabler/icons';
 import HomeBannerCalendar from '../components/calendar/HomeBannerCalendar';
-import HomeHeroCreateBtn from '../components/common/HomeHeroCreateBtn';
+import HomeHeroCreateBtn, { HomeHeroDonateBtn } from '../components/common/HomeHeroCreateBtn';
 
 const Home = () => {
     const theme = useMantineTheme()
@@ -45,7 +45,7 @@ const Home = () => {
                                         Our aim is to provide a clear and easy to use platform to help you <span className={classes.bold}>shift a life</span>.
                                     </Text>
                                     <Group mt="xl">
-                                        <Button radius="xl" px="xl" color="purple">Donate Today</Button>
+                                        <HomeHeroDonateBtn />
                                         <HomeHeroCreateBtn />
                                     </Group>
                                 </Stack>

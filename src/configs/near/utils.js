@@ -26,3 +26,9 @@ export function disconnectWallet() {
 export function connectWallet() {
   window.walletConnection.requestSignIn(nearConfig.contractName)
 }
+
+
+export async function getCauses(){
+  let causes = await window.contract.get_causes()
+  return causes
+}

@@ -14,6 +14,7 @@ import { getAmtString, getTokenPrice, getUSD, makeArray } from '../../configs/ne
 import CampaignDonations from '../../components/activities/CampaignDonations';
 import BecomePartnerModal from '../../components/common/BecomePartnerModal';
 import DonDetails from '../../components/activities/DonDetails';
+import { connectWallet } from '../../configs/near/utils';
 
 const SingleEvent = () => {
 
@@ -212,6 +213,7 @@ const SingleEvent = () => {
     }
   }
 
+  const isSignedIn = window?.walletConnection?.isSignedIn()
 
   useEffect(() => {
     if (data?.token.toLowerCase() === "near") {
@@ -238,7 +240,7 @@ const SingleEvent = () => {
         loadTokenPrice(selectedToken?.address)
         return;
       }
-    } else {
+    } else if (data?.token !== "near" || data?.token !== "any") {
       loadTokenPrice(data?.token)
       return;
     }
@@ -371,11 +373,15 @@ const SingleEvent = () => {
                     textTransform: "capitalize"
                   }}>{tokenDetails?.symbol?.substring(0, 1)}</Avatar>} />
                 <Text size="xs" align="center">This event is set to receive <b>{tokenDetails?.symbol}</b> Tokens</Text>
-                <Button color="indigo" size="md"
-                  leftIcon={<IconCashBanknote />} radius="xl" fullWidth
-                  onClick={showModal}>
-                  Donate
-                </Button>
+                {
+                  !isSignedIn ? <Button radius="xl" fullWidth px="xl" color="purple" onClick={connectWallet}>Connect wallet</Button>
+                    :
+                    <Button color="indigo" size="md"
+                      leftIcon={<IconCashBanknote />} radius="xl" fullWidth
+                      onClick={showModal}>
+                      Donate
+                    </Button>
+                }
                 {/* <Text size="xs" align='center'>
                   Each msg attached to token deposits should have the following separated by : <br />
                   donation_id, target, campaign_id, event_id, amount_usd ie <br />

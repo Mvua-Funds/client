@@ -12,7 +12,7 @@ export const CONTRACT_VIEW_METHODS = [
   "filter_campaigns",
   "get_causes",
   "get_event", 
-  "get_events", 
+  "get_events",
   "filter_events",
   "get_tokens",
   "get_campaign_donations",

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, Container, Grid, Select, Stack, TextInput, Title, useMantineTheme, Paper, Textarea, Group, Button, LoadingOverlay, Avatar, Text, ActionIcon } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 
@@ -11,16 +11,24 @@ import { nanoid } from "nanoid"
 import { ShiftALifeFunctionCall } from '../../configs/nearutils';
 import { showNotification } from '@mantine/notifications';
 import SelectTokenModal from '../../components/common/SelectTokenModal';
+import { connectWallet, getCauses } from '../../configs/near/utils';
 
 
 const CreateEvent = () => {
 
   const [loading, setLoading] = useState(false)
+  const [causes, setCauses] = useState<null | any>([])
   const [openModal, setOpenModal] = useState(false)
   const [selectedToken, setSelectedToken] = useState(NEAR_OBJECT)
   // const [openModal, setOpenModal] = useState(false)
 
   const theme = useMantineTheme()
+
+  const loadCauses = () => {
+    getCauses().then((res: any) => {
+      setCauses(res)
+    }).catch((err: any) => { })
+  }
 
   const form = useForm({
     initialValues: {
@@ -94,6 +102,12 @@ const CreateEvent = () => {
     }
   }
 
+  const isSignedIn = window?.walletConnection?.isSignedIn()
+
+  useEffect(() => {
+    loadCauses()
+  }, [])
+
   return (
     <>
       <Helmet>
@@ -119,9 +133,8 @@ const CreateEvent = () => {
                       // borderColor: getTheme(theme) ? theme.colors.dark[4] : "#242a49",
                       // borderWidth: "2px"
                     }
-                  }} data={[
-                    { value: "Tree planting", label: "Tree planting" }
-                  ]} {...form.getInputProps('cause')} />
+                  }} data={causes.map((cause: any) => ({ value: cause?.title, label: cause?.title }))}
+                    {...form.getInputProps('cause')} />
                   <Textarea minRows={5} placeholder="Describe the event" label="Description" radius="md" styles={{
                     input: {
                       // borderColor: getTheme(theme) ? theme.colors.dark[4] : "#242a49",
@@ -224,7 +237,11 @@ const CreateEvent = () => {
                   </Grid>
 
                   <Group align="center" position='center'>
-                    <Button type='submit' leftIcon={<IconCalendarEvent />} color="purple" radius="xl" px="xl">Create Event</Button>
+                    {
+                      !isSignedIn ? <Button radius="xl" px="xl" color="purple" onClick={connectWallet}>Connect wallet</Button>
+                        :
+                        <Button type='submit' leftIcon={<IconCalendarEvent />} color="purple" radius="xl" px="xl">Create Event</Button>
+                    }
                   </Group>
                 </Stack>
               </form>
