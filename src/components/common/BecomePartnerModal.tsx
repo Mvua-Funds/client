@@ -5,7 +5,6 @@ import { ShiftALifeViewFunctionCall } from '../../configs/nearutils'
 import bodyStyles from '../styles/bodyStyles';
 import { showNotification } from '@mantine/notifications';
 import { IconCheck, IconX, IconAlertCircle } from '@tabler/icons';
-import { useParams } from 'react-router-dom';
 import { Loader } from '@mantine/core';
 
 const BecomePartnerModal = (props: any) => {

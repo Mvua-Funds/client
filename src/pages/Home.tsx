@@ -1,13 +1,10 @@
 import React from 'react'
 // COlor: #242a49
 
-import { Box, Button, Container, Grid, Group, Stack, Text, Title, useMantineTheme, Image, SegmentedControl, Paper, Center } from '@mantine/core';
+import { Box, Button, Container, Grid, Group, Stack, Text, Title, useMantineTheme } from '@mantine/core';
 import bodyStyles from '../components/styles/bodyStyles';
-import { getTheme } from '../configs/appfunctions';
 import { Helmet } from 'react-helmet';
-import { SEPARATOR, APP_NAME } from '../configs/appconfig';
-import { Calendar } from '@mantine/dates';
-import { IconCalendarEvent, IconSpeakerphone } from '@tabler/icons';
+import {  APP_NAME } from '../configs/appconfig';
 import HomeBannerCalendar from '../components/calendar/HomeBannerCalendar';
 import HomeHeroCreateBtn, { HomeHeroDonateBtn } from '../components/common/HomeHeroCreateBtn';
 
@@ -17,7 +14,8 @@ const Home = () => {
     return (
         <>
             <Helmet>
-                <title> {APP_NAME} - Make change today</title>
+                <title> {APP_NAME} - Donate today, save a life.</title>
+                <meta name='description' content='We help raise funds through donations in the Near Blockchain environment to help fight calamities within Kenya and world at large.' />
             </Helmet>
             <Container py="xs" size="xl">
                 <div>
