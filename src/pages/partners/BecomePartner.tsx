@@ -9,6 +9,11 @@ import { IconCheck, IconX, IconAlertCircle } from '@tabler/icons';
 
 const BecomePartner = () => {
   const [loading, setLoading] = useState(false)
+//state for image
+const [imageUplaod,setImageupload]=useState(null);
+const UploadImage=()=>{
+  if(imageUplaod==null)return;
+};
 
   const form = useForm({
     initialValues: {
@@ -74,7 +79,7 @@ const BecomePartner = () => {
           <LoadingOverlay visible={loading} />
           <form onSubmit={form.onSubmit((values) => handleSubmit())}>
             <TextInput label="Partner name" placeholder='Enter partner name' {...form.getInputProps('name')} />
-            //other details
+            
             <TextInput label="Partner description" placeholder='Enter description' {...form.getInputProps('description')} />
             <TextInput label="Partner's company website" placeholder='Enter website link' {...form.getInputProps('webUrl')} />
 
@@ -89,8 +94,11 @@ const BecomePartner = () => {
             <input  id="banner-upload" name="banner-upload" type="file" />
 
              </label>
+
             <Group position='center' my="xl">
-              <Button type='submit' radius="xl" color="indigo">Register</Button>
+              <Button 
+              onClick={UploadImage}
+              type='submit' radius="xl" color="indigo">Register</Button>
             </Group>
 
           </form>
