@@ -12,7 +12,11 @@ const BecomePartner = () => {
 
   const form = useForm({
     initialValues: {
-      name: ""
+      name: "",
+      description: "",
+      webUrl:"",
+      logo: "",
+      banner: ""
     },
     validate: {
       name: value => value === "" || value.length < 5 ? "Enter partner name" : null
@@ -64,13 +68,31 @@ const BecomePartner = () => {
       </Helmet>
       <Container py="xl">
         <Paper radius="lg" p="xs" py="xl" sx={{position: "relative"}}>
+
           <Title align='center' mb="xl">Register new partner </Title>
+
           <LoadingOverlay visible={loading} />
           <form onSubmit={form.onSubmit((values) => handleSubmit())}>
             <TextInput label="Partner name" placeholder='Enter partner name' {...form.getInputProps('name')} />
+            //other details
+            <TextInput label="Partner description" placeholder='Enter description' {...form.getInputProps('description')} />
+            <TextInput label="Partner's company website" placeholder='Enter website link' {...form.getInputProps('webUrl')} />
+
+            <label htmlFor ="logo-upload ">  
+            <span> upload Logo </span>
+            <input  id="logo-upload" name="logo-upload" type="file" />
+
+             </label>
+
+             <label htmlFor ="Banner-upload ">  
+            <span> upload Banner </span>
+            <input  id="banner-upload" name="banner-upload" type="file" />
+
+             </label>
             <Group position='center' my="xl">
               <Button type='submit' radius="xl" color="indigo">Register</Button>
             </Group>
+
           </form>
         </Paper>
       </Container>
