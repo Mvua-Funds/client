@@ -3,17 +3,29 @@ import React from 'react'
 import { Helmet } from 'react-helmet';
 import { SEPARATOR, APP_NAME } from '../../configs/appconfig';
 import { useForm } from '@mantine/form';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { showNotification } from '@mantine/notifications';
 import { IconCheck, IconX, IconAlertCircle } from '@tabler/icons';
+import { v4 } from 'uuid';
+
+//firebase imports
+import { storage } from '../../firebase';
+import { ref,uploadBytes } from 'firebase/storage';
+
 
 const BecomePartner = () => {
   const [loading, setLoading] = useState(false)
 //state for image
-const [imageUplaod,setImageupload]=useState(null);
+const [imageUpload,setImageupload]=useState(null);
 const UploadImage=()=>{
-  if(imageUplaod==null)return;
+  if(imageUpload==null)return;
+  //firebase funcs to upload file
+  const imageRef=ref(storage,`images/${imageUpload['name'] +v4() }`);
+  uploadBytes(imageRef,imageUpload).then( ()=>{
+    alert("Image Uploaded")
+  })
 };
+
 
   const form = useForm({
     initialValues: {
@@ -85,7 +97,9 @@ const UploadImage=()=>{
 
             <label htmlFor ="logo-upload ">  
             <span> upload Logo </span>
-            <input  id="logo-upload" name="logo-upload" type="file" />
+            <input   
+           // onChange={(event)=>{setImageupload(event.target.files[0])}}
+            onClick={UploadImage} id="logo-upload" name="logo-upload" type="file" />
 
              </label>
 
