@@ -10,13 +10,20 @@ import { v4 } from 'uuid';
 
 //firebase imports
 import { storage } from '../../firebase';
-import { ref,uploadBytes } from 'firebase/storage';
+import { ref,uploadBytes,listAll,getDownloadURL } from 'firebase/storage';
+import { url } from 'inspector';
 
 
 const BecomePartner = () => {
   const [loading, setLoading] = useState(false)
 //state for image
 const [imageUpload,setImageupload]=useState(null);
+//state for image url
+const[imageList,setImageList]=useState( []);
+
+//variable to store entire image folder
+const imageListRef=ref(storage,"images/")
+
 const UploadImage=()=>{
   if(imageUpload==null)return;
   //firebase funcs to upload file
@@ -26,7 +33,17 @@ const UploadImage=()=>{
   })
 };
 
-
+useEffect( ()=>{
+listAll(imageListRef).then( (response)=>{
+  response.items.forEach( (item) =>{
+    getDownloadURL(item).then( (url)=>{
+      //type error
+      setImageList( (prev) =>[ ...,url]);
+    }
+    )
+  })
+})
+},[])
   const form = useForm({
     initialValues: {
       name: "",
@@ -116,6 +133,9 @@ const UploadImage=()=>{
             </Group>
 
           </form>
+          {imageList.map( (url) =>{
+            return <img src={url}/>
+          })}
         </Paper>
       </Container>
     </>
