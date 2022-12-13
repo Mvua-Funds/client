@@ -6,12 +6,11 @@ import bodyStyles from '../components/styles/bodyStyles';
 import { Helmet } from 'react-helmet';
 import {  APP_NAME } from '../configs/appconfig';
 import HomeBannerCalendar from '../components/calendar/HomeBannerCalendar';
-<<<<<<< HEAD
-import HomeHeroCreateBtn from '../components/common/HomeHeroCreateBtn';
+
 import Campaign from '../components/recents/Campaign';
-=======
+
 import HomeHeroCreateBtn, { HomeHeroDonateBtn } from '../components/common/HomeHeroCreateBtn';
->>>>>>> 3d414d130305f2cd063ea01189a8cd274ca7f6a7
+
 
 const Home = () => {
     const theme = useMantineTheme()
