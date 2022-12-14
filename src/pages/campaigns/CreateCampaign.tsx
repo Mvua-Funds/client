@@ -1,5 +1,5 @@
-import React from 'react'
-import { Card, Container, Grid, Select, Stack, TextInput, Title, useMantineTheme, Paper, Textarea, Group, Button, LoadingOverlay, Text, ActionIcon, Avatar } from '@mantine/core';
+import React, { useMemo } from 'react'
+import { Card, Container, Grid, Select, Stack, TextInput, Title, useMantineTheme, Paper, Textarea, Group, Button, LoadingOverlay, Text, ActionIcon, Avatar, Center, Image, FileInput, Box } from '@mantine/core';
 import { DatePicker, DateRangePicker } from '@mantine/dates';
 
 import { getTheme } from '../../configs/appfunctions';
@@ -15,6 +15,11 @@ import SelectTokenModal from '../../components/common/SelectTokenModal';
 import { getCauses, connectWallet } from '../../configs/near/utils';
 import { useEffect } from 'react';
 
+import { v4 } from 'uuid';
+//firebase imports
+import { storage } from '../../firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 
 const CreateCampaign = () => {
 
@@ -22,6 +27,9 @@ const CreateCampaign = () => {
   const [causes, setCauses] = useState<null | any>([])
   const [openModal, setOpenModal] = useState(false)
   const [selectedToken, setSelectedToken] = useState(NEAR_OBJECT)
+
+  const [uploading, setUploading] = useState(false)
+  const [img, setImg] = useState<any>(null)
 
   const theme = useMantineTheme()
 
@@ -54,6 +62,22 @@ const CreateCampaign = () => {
     }
   })
 
+  const UploadImage = (file: any) => {
+    setUploading(true)
+    const imageRef = ref(storage, `images/${file['name'] + v4()}`);
+    uploadBytes(imageRef, file).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        setImg(url)
+        setUploading(false)
+      })
+
+    })
+  };
+
+  const uploadFile = () => {
+    UploadImage(form.values['img'])
+  }
+
   const handleSubmit = () => {
 
     const walletConnection = window.walletConnection
@@ -76,7 +100,7 @@ const CreateCampaign = () => {
       end_date: end_date?.toString(),
       end_dates: `${e_year},${e_month},${e_day}`,
       created_by: account,
-      img: "someimageurl",
+      img: img,
       id: nanoid() + Date.now(),
       token: selectedToken.address,
     }
@@ -98,6 +122,7 @@ const CreateCampaign = () => {
           icon: <IconCheck />
         })
         form.reset()
+        setImg(null)
       }).catch((e: any) => {
         console.error("Error: ", e)
         showNotification({
@@ -117,6 +142,18 @@ const CreateCampaign = () => {
     loadCauses()
   }, [])
 
+  const waitChange = useMemo(() => {
+    return {
+      continue: img ? true : false
+    }
+  }, [img])
+ 
+  useEffect(() => {
+    if (img) {
+      handleSubmit()
+    }
+  }, [waitChange])
+
   return (
     <>
       <Helmet>
@@ -127,9 +164,9 @@ const CreateCampaign = () => {
         <Grid>
           <Grid.Col md={6} offsetMd={3}>
             <Paper radius="lg" p="xs" sx={{ position: "relative" }}>
-              <LoadingOverlay visible={loading} />
+              <LoadingOverlay visible={loading || uploading} />
               <Title weight={500} align="center" mb="md">Create new campaign</Title>
-              <form onSubmit={form.onSubmit((values) => handleSubmit())}>
+              <form onSubmit={form.onSubmit((values) => uploadFile())}>
                 <Stack>
                   <TextInput label="Title" placeholder='Campaign title' radius="md" styles={{
                     input: {
@@ -218,6 +255,9 @@ const CreateCampaign = () => {
                         }
                       }} {...form.getInputProps('target')} />
                     </Grid.Col>
+                    <Grid.Col>
+                      <FileInput accept="image/png,image/jpeg, image/jpg" label="Campaing Image" placeholder='Select banner' {...form.getInputProps('img')} />
+                    </Grid.Col>
                   </Grid>
 
                   <Group align="center" position='center'>
@@ -230,6 +270,14 @@ const CreateCampaign = () => {
                   </Group>
                 </Stack>
               </form>
+              <Box my="xl">
+                <Title order={3} align="center" mb="md">Image</Title>
+                <Center>
+                  {
+                    img ? <Image radius="lg" src={img} /> : null
+                  }
+                </Center>
+              </Box>
             </Paper>
           </Grid.Col>
         </Grid>

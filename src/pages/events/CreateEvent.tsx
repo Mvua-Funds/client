@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Container, Grid, Select, Stack, TextInput, Title, useMantineTheme, Paper, Textarea, Group, Button, LoadingOverlay, Avatar, Text, ActionIcon } from '@mantine/core';
+import React, { useEffect, useState, useMemo } from 'react'
+import { Card, Container, Grid, Select, Stack, TextInput, Title, useMantineTheme, Paper, Textarea, Group, Button, LoadingOverlay, Avatar, Text, ActionIcon, Image, FileInput, Box, Center } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 
 import { getTheme } from '../../configs/appfunctions';
@@ -13,6 +13,11 @@ import { showNotification } from '@mantine/notifications';
 import SelectTokenModal from '../../components/common/SelectTokenModal';
 import { connectWallet, getCauses } from '../../configs/near/utils';
 
+import { v4 } from 'uuid';
+//firebase imports
+import { storage } from '../../firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 
 const CreateEvent = () => {
 
@@ -21,6 +26,9 @@ const CreateEvent = () => {
   const [openModal, setOpenModal] = useState(false)
   const [selectedToken, setSelectedToken] = useState(NEAR_OBJECT)
   // const [openModal, setOpenModal] = useState(false)
+
+  const [uploading, setUploading] = useState(false)
+  const [img, setImg] = useState<any>(null)
 
   const theme = useMantineTheme()
 
@@ -41,7 +49,8 @@ const CreateEvent = () => {
       channel: null,
       channel_url: null,
       token: "",
-      target: ""
+      target: "",
+      img: "",
     },
     validate: {
       title: value => value === "" ? "Title cannot be empty" : null,
@@ -52,6 +61,19 @@ const CreateEvent = () => {
       venue: value => value === "" ? "Enter event venue" : null,
     }
   })
+
+  const UploadImage = (file: any) => {
+    setUploading(true)
+    const imageRef = ref(storage, `images/${file['name'] + v4()}`);
+    uploadBytes(imageRef, file).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        console.log("image")
+        setImg(url)
+        setUploading(false)
+      })
+
+    })
+  };
 
   const handleSubmit = () => {
 
@@ -68,7 +90,7 @@ const CreateEvent = () => {
       date: date?.toString(),
       dates: `${year},${month},${day}`,
       created_by: account,
-      img: "someimageurl",
+      img: img,
       id: nanoid() + Date.now(),
       token: selectedToken.address,
     }
@@ -102,11 +124,27 @@ const CreateEvent = () => {
     }
   }
 
+  const uploadFile = () => {
+    UploadImage(form.values['img'])
+  }
+
   const isSignedIn = window?.walletConnection?.isSignedIn()
 
   useEffect(() => {
     loadCauses()
   }, [])
+
+  const waitChange = useMemo(() => {
+    return {
+      continue: img ? true : false
+    }
+  }, [img])
+
+  useEffect(() => {
+    if (img) {
+      handleSubmit()
+    }
+  }, [waitChange])
 
   return (
     <>
@@ -118,9 +156,9 @@ const CreateEvent = () => {
         <Grid>
           <Grid.Col md={6} offsetMd={3}>
             <Paper radius="lg" p="xs" sx={{ position: "relative" }}>
-              <LoadingOverlay visible={loading} />
+              <LoadingOverlay visible={loading || uploading} />
               <Title weight={500} align="center" mb="md">Create new event</Title>
-              <form onSubmit={form.onSubmit((values) => handleSubmit())}>
+              <form onSubmit={form.onSubmit((values) => uploadFile())}>
                 <Stack>
                   <TextInput label="Title" placeholder='Event title' radius="md" styles={{
                     input: {
@@ -234,6 +272,9 @@ const CreateEvent = () => {
                         }
                       }} {...form.getInputProps('target')} />
                     </Grid.Col>
+                    <Grid.Col>
+                      <FileInput accept="image/png,image/jpeg, image/jpg" label="Campaing Image" placeholder='Select banner' {...form.getInputProps('img')} />
+                    </Grid.Col>
                   </Grid>
 
                   <Group align="center" position='center'>
@@ -245,6 +286,14 @@ const CreateEvent = () => {
                   </Group>
                 </Stack>
               </form>
+              <Box my="xl">
+                <Title order={3} align="center" mb="md">Image</Title>
+                <Center>
+                  {
+                    img ? <Image radius="lg" src={img} /> : null
+                  }
+                </Center>
+              </Box>
             </Paper>
           </Grid.Col>
         </Grid>

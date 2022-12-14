@@ -18,8 +18,8 @@ const EventCard = (props: any) => {
                 height: "300px",
                 position: "relative",
                 // borderRadius: theme.radius.lg,
-            }}>
-                <img loading='lazy' src="https://images.unsplash.com/photo-1420593248178-d88870618ca0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JlZW4lMjBmb3Jlc3R8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
+            }}> 
+                <img loading='lazy' src={details?.img !== "someimageurl" ? details?.img : "https://images.unsplash.com/photo-1420593248178-d88870618ca0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JlZW4lMjBmb3Jlc3R8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"}
                     style={{
                         width: "100%",
                         height: "100%",

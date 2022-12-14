@@ -268,7 +268,7 @@ const SingleEvent = () => {
           <Grid.Col md={7}>
             <Box>
               <Title order={1} className={classes.subtitle} mb="xl">{data?.title}</Title>
-              <img loading='lazy' src="https://images.unsplash.com/photo-1420593248178-d88870618ca0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JlZW4lMjBmb3Jlc3R8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
+              <img loading='lazy' src={data?.img !== "someimageurl" ? data?.img : "https://images.unsplash.com/photo-1420593248178-d88870618ca0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JlZW4lMjBmb3Jlc3R8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"}
                 style={{
                   width: "100%",
                   height: "100%",
@@ -276,9 +276,13 @@ const SingleEvent = () => {
                   aspectRatio: "16/9",
                   borderRadius: theme.radius.lg,
                 }} />
-              <Text className={classes.text} my="md" p="xs">
-                {data?.description}
-              </Text>
+              <Paper p="xs" radius="lg" my="md">
+                <Text className={classes.text} p="xs" sx={{
+                  whiteSpace: "pre"
+                }}>
+                  {data?.description}
+                </Text>
+              </Paper>
               <Paper p="xs" radius="lg">
                 <Grid>
                   <Grid.Col md={6}>
