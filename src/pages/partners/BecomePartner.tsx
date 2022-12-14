@@ -17,19 +17,22 @@ import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
 const BecomePartner = () => {
   const [loading, setLoading] = useState(false)
   //state for image
-  const [imageUpload, setImageupload] = useState(null);
+  const [imageUpload, setImageUpload] = useState(null);
   //state for image url
-  const [imageList, setImageList] = useState<null | any>([]);
+  const [imageList, setImageList] = useState<File [] > ([] );
 
   //variable to store entire image folder
   const imageListRef = ref(storage, "images/")
-
+ 
   const UploadImage = () => {
     if (imageUpload == null) return;
     //firebase funcs to upload file
     const imageRef = ref(storage, `images/${imageUpload['name'] + v4()}`);
-    uploadBytes(imageRef, imageUpload).then(() => {
-      alert("Image Uploaded")
+    uploadBytes(imageRef, imageUpload).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then( (url)=> {
+        setImageList( ( prev:any) =>[ ...prev,url])
+      })
+      
     })
   };
 
@@ -37,13 +40,12 @@ const BecomePartner = () => {
     listAll(imageListRef).then((response) => {
       response.items.forEach((item: any) => {
         getDownloadURL(item).then((url: any) => {
-          //type error
           setImageList((prev: any) => [...prev, url]);
         }
         )
       })
     })
-  }, [])
+  }, []) 
   const form = useForm({
     initialValues: {
       name: "",
@@ -95,6 +97,8 @@ const BecomePartner = () => {
     }
   }
 
+
+
   return (
     <>
       <Helmet>
@@ -115,11 +119,11 @@ const BecomePartner = () => {
             <label htmlFor="logo-upload ">
               <span> upload Logo </span>
               <input
-                // onChange={(event)=>{setImageupload(event.target.files[0])}}
+              //  onChange={(event)=>{setImageUpload(Array.from(event.target.files ?? []))} /> )}
                 onClick={UploadImage} id="logo-upload" name="logo-upload" type="file" />
 
             </label>
-
+         
             <label htmlFor="Banner-upload ">
               <span> upload Banner </span>
               <input id="banner-upload" name="banner-upload" type="file" />
