@@ -7,6 +7,8 @@ import { useState, useEffect } from 'react';
 import { showNotification } from '@mantine/notifications';
 import { IconCheck, IconX, IconAlertCircle } from '@tabler/icons';
 import { v4 } from 'uuid';
+import { useNavigate } from "react-router-dom";
+  
 
 //firebase imports
 import { storage } from '../../firebase';
@@ -17,13 +19,13 @@ import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
 const BecomePartner = () => {
   const [loading, setLoading] = useState(false)
   //state for image
-  const [imageUpload, setImageUpload] = useState(null);
+  const [imageUpload, setImageUpload] = useState<null | File>(null);
   //state for image url
   const [imageList, setImageList] = useState<File [] > ([] );
 
   //variable to store entire image folder
   const imageListRef = ref(storage, "images/")
- 
+
   const UploadImage = () => {
     if (imageUpload == null) return;
     //firebase funcs to upload file
@@ -96,9 +98,8 @@ const BecomePartner = () => {
       })
     }
   }
-
-
-
+//varable to navigate to Partners page
+let navigate = useNavigate(); 
   return (
     <>
       <Helmet>
@@ -118,12 +119,10 @@ const BecomePartner = () => {
 
             <label htmlFor="logo-upload ">
               <span> upload Logo </span>
-              <input
-              //  onChange={(event)=>{setImageUpload(Array.from(event.target.files ?? []))} /> )}
+               </label>
+            <input
+               onChange={(event : any)=>{setImageUpload(event.target.files[0])}  }
                 onClick={UploadImage} id="logo-upload" name="logo-upload" type="file" />
-
-            </label>
-         
             <label htmlFor="Banner-upload ">
               <span> upload Banner </span>
               <input id="banner-upload" name="banner-upload" type="file" />
@@ -132,7 +131,10 @@ const BecomePartner = () => {
 
             <Group position='center' my="xl">
               <Button
-                onClick={UploadImage}
+                // onClick={UploadImage}
+                // onSubmit={ () => {
+                //   navigate('Partners');
+                // }}
                 type='submit' radius="xl" color="indigo">Register</Button>
             </Group>
 
