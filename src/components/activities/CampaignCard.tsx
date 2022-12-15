@@ -1,13 +1,38 @@
 import { Paper, Box, Stack, Title, Badge, Button, Group, Text, Anchor, Tooltip } from '@mantine/core'
 import { IconCashBanknote, IconCalendar } from '@tabler/icons'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { ANY_TOKEN, NEAR_OBJECT } from '../../configs/appconfig'
 import { getTimezone } from '../../configs/appfunctions'
+import { getReadableTokenBalance } from '../../configs/nearutils'
 import bodyStyles from '../styles/bodyStyles'
 
 const CampaignCard = (props: any) => {
     const { details } = props;
     const { theme, classes } = bodyStyles()
+
+    const [tokenDetails, setTokenDetails] = useState<null | any>(null)
+
+    const getTokenMetadata = () => {
+        const wallet = window.walletConnection
+        if (wallet) {
+            if (details.token === "any") {
+                setTokenDetails(ANY_TOKEN)
+            }
+            else if (details.token === "near") {
+                setTokenDetails(NEAR_OBJECT)
+            }
+            else {
+                wallet.account().viewFunction(details?.token, "ft_metadata", {}, "3000000000000000").then((res: any) => {
+                    setTokenDetails(res)
+                }).catch((err: any) => { })
+            }
+        }
+    }
+
+    useEffect(() => {
+        getTokenMetadata()
+    }, [])
 
     return (
         <Paper radius="lg" sx={{
@@ -41,7 +66,7 @@ const CampaignCard = (props: any) => {
                 }}>
                     <Stack className='w-100' spacing={10}>
                         <Title order={2} color="white" sx={{ textTransform: "capitalize" }} align="center">{details?.title}</Title>
-                        <Badge sx={{ width: "fit-content" }} mx="auto" variant='light'>Target: {details?.current} / {details?.target} {details?.token}</Badge>
+                        <Badge sx={{ width: "fit-content" }} mx="auto" variant='light'>Target: {details?.token === "any" ? details?.currenct_usd : getReadableTokenBalance(details?.current, tokenDetails?.decimals)} / {details?.target} {details?.token === "any" ? "USD" : tokenDetails?.symbol}</Badge>
                         <Anchor to={`/campaigns/${details?.id}`} component={Link} mx="auto">
                             <Button sx={{ width: "fit-content" }} radius="xl" px="xl" color="indigo" leftIcon={<IconCashBanknote />}>Donate</Button>
                         </Anchor>

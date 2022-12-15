@@ -224,7 +224,7 @@ const SingleEvent = () => {
     else {
       let cur = new BigNumber(data?.current).dividedBy(10 ** tokenDetails?.decimals)
       // return (cur.toNumber() / data?.target) * 100
-      return new BigNumber(cur).dividedBy(data?.current).multipliedBy(100).toNumber()
+      return new BigNumber(cur).dividedBy(data?.target).multipliedBy(100).toNumber()
     }
   }
 
@@ -412,7 +412,7 @@ const SingleEvent = () => {
                   </Avatar>
                 </Center>
                 <Text className={classes.text} align="center" weight={600}>
-                  {data?.token === "any" ? data?.current_usd : data?.current}
+                  {data?.token === "any" ? data?.current_usd : getReadableTokenBalance(data?.current, tokenDetails?.decimals)}
                   &nbsp;
                   {data?.token === "any" ? "USD" : tokenDetails?.symbol}
                 </Text>
@@ -475,7 +475,7 @@ const SingleEvent = () => {
               <Text size="md" className={classes.text} align="end" weight={700}>
                 Total: {data?.token === "any" ? data?.current_usd : getReadableTokenBalance(data?.current, tokenDetails?.decimals)} {data?.token === "any" ? "USD" : tokenDetails?.symbol}
               </Text>
-              <Text size="xs" className={classes.text} align="end">Approximately: {data?.current_usd} </Text>
+              <Text size="xs" className={classes.text} align="end">Approximately: {data?.current_usd} USD </Text>
             </Stack>
           </Group>
           <CampaignDonations category="events" id={eid} />
@@ -492,7 +492,7 @@ const SingleEvent = () => {
               <Text size="md" className={classes.text} align="end" weight={700}>
                 Total: {data?.token === "any" ? data?.current_usd : getReadableTokenBalance(data?.current, tokenDetails?.decimals)} {data?.token === "any" ? "USD" : tokenDetails?.symbol}
               </Text>
-              <Text size="xs" className={classes.text} align="end">Approximately: {data?.current_usd} </Text>
+              <Text size="xs" className={classes.text} align="end">Approximately: {data?.current_usd} USD </Text>
             </Stack>
           </Group>
           <Title order={4}>Partners</Title>

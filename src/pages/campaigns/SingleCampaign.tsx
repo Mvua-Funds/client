@@ -225,7 +225,7 @@ const SingleCampaign = () => {
     else {
       let cur = new BigNumber(data?.current).dividedBy(10 ** tokenDetails?.decimals)
       // return (cur.toNumber() / data?.target) * 100
-      return new BigNumber(cur).dividedBy(data?.current).multipliedBy(100).toNumber()
+      return new BigNumber(cur).dividedBy(data?.target).multipliedBy(100).toNumber()
     }
   }
 
@@ -282,7 +282,7 @@ const SingleCampaign = () => {
           <Grid.Col md={7}>
             <Box>
               <Title order={1} className={classes.subtitle} mb="xl">{data?.title}</Title>
-              <img loading='lazy' src={data?.img ? data?.img : "https://images.unsplash.com/photo-1420593248178-d88870618ca0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JlZW4lMjBmb3Jlc3R8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"}
+              <img loading='lazy' src={data?.img !== "" ? data?.img : "https://images.unsplash.com/photo-1420593248178-d88870618ca0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JlZW4lMjBmb3Jlc3R8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"}
                 style={{
                   width: "100%",
                   height: "100%",
@@ -419,7 +419,7 @@ const SingleCampaign = () => {
                   </Avatar>
                 </Center>
                 <Text className={classes.text} align="center" weight={600}>
-                  {data?.token === "any" ? data?.current_usd : data?.current}
+                  {data?.token === "any" ? data?.current_usd : getReadableTokenBalance(data?.current, tokenDetails?.decimals)}
                   &nbsp;
                   {data?.token === "any" ? "USD" : tokenDetails?.symbol}
                 </Text>
@@ -482,7 +482,7 @@ const SingleCampaign = () => {
               <Text size="md" className={classes.text} align="end" weight={700}>
                 Total: {data?.token === "any" ? data?.current_usd : getReadableTokenBalance(data?.current, tokenDetails?.decimals)} {data?.token === "any" ? "USD" : tokenDetails?.symbol}
               </Text>
-              <Text size="xs" className={classes.text} align="end">Approximately: {data?.current_usd} </Text>
+              <Text size="xs" className={classes.text} align="end">Approximately: {data?.current_usd} USD </Text>
             </Stack>
           </Group>
           <CampaignDonations category="campaigns" id={cid} />
@@ -499,7 +499,7 @@ const SingleCampaign = () => {
               <Text size="md" className={classes.text} align="end" weight={700}>
                 Total: {data?.token === "any" ? data?.current_usd : getReadableTokenBalance(data?.current, tokenDetails?.decimals)} {data?.token === "any" ? "USD" : tokenDetails?.symbol}
               </Text>
-              <Text size="xs" className={classes.text} align="end">Approximately: {data?.current_usd} </Text>
+              <Text size="xs" className={classes.text} align="end">Approximately: {data?.current_usd} USD </Text>
             </Stack>
           </Group>
           <Title order={4}>Partners</Title>
