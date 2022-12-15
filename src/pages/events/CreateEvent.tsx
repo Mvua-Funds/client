@@ -273,7 +273,7 @@ const CreateEvent = () => {
                       }} {...form.getInputProps('target')} />
                     </Grid.Col>
                     <Grid.Col>
-                      <FileInput accept="image/png,image/jpeg, image/jpg" label="Campaing Image" placeholder='Select banner' {...form.getInputProps('img')} />
+                      <FileInput accept="image/png,image/jpeg, image/jpg, image/webp" label="Campaing Image" placeholder='Select banner' {...form.getInputProps('img')} />
                     </Grid.Col>
                   </Grid>
 

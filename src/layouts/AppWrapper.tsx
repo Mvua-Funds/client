@@ -102,7 +102,7 @@ export default function AppWrapper(props: any) {
 
                         <MediaQuery smallerThan="md" styles={{ display: 'none' }}>
                             <Group>
-                                <Button radius="xl" px="xl" color="purple" onClick={isSignedIn ? disconnectWallet : connectWallet}>{isSignedIn ? "Disconnect wallet" : "Connect wallet"}</Button>
+                                <Button radius="xl" px="xl" color="indigo" onClick={isSignedIn ? disconnectWallet : connectWallet}>{isSignedIn ? "Disconnect wallet" : "Connect wallet"}</Button>
                                 <ColorSchemeToggle />
                             </Group>
                         </MediaQuery>

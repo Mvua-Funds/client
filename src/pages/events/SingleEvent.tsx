@@ -1,4 +1,4 @@
-import { ActionIcon, Avatar, Box, Button, Center, Container, Grid, Group, List, Loader, LoadingOverlay, Paper, ScrollArea, Stack, Table, Text, TextInput, Title, Tooltip } from '@mantine/core';
+import { ActionIcon, Avatar, Box, Button, Center, ColorSwatch, Container, Grid, Group, List, Loader, LoadingOverlay, Paper, RingProgress, ScrollArea, Stack, Table, Text, TextInput, Title, Tooltip } from '@mantine/core';
 import React, { useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet';
 import { SEPARATOR, APP_NAME, NEAR_OBJECT, ANY_TOKEN, CONTRACT } from '../../configs/appconfig';
@@ -10,11 +10,12 @@ import SelectTokenModal from '../../components/common/SelectTokenModal';
 import { useModals } from '@mantine/modals';
 import { showNotification } from '@mantine/notifications';
 import { nanoid } from 'nanoid';
-import { getAmtString, getTokenPrice, getUSD, makeArray } from '../../configs/nearutils';
+import { getAmtString, getReadableTokenBalance, getTokenPrice, getUSD, makeArray } from '../../configs/nearutils';
 import CampaignDonations from '../../components/activities/CampaignDonations';
 import BecomePartnerModal from '../../components/common/BecomePartnerModal';
 import DonDetails from '../../components/activities/DonDetails';
 import { connectWallet } from '../../configs/near/utils';
+import BigNumber from 'bignumber.js';
 
 const SingleEvent = () => {
 
@@ -215,6 +216,19 @@ const SingleEvent = () => {
 
   const isSignedIn = window?.walletConnection?.isSignedIn()
 
+  const getCurrentPercentage = () => {
+    if (data?.token === "any") {
+      // return (parseFloat(data?.current_usd ) / parseFloat(data?.target)) * 100
+      return new BigNumber(data?.current_usd).dividedBy(data?.target).multipliedBy(100).toNumber()
+    }
+    else {
+      let cur = new BigNumber(data?.current).dividedBy(10 ** tokenDetails?.decimals)
+      // return (cur.toNumber() / data?.target) * 100
+      return new BigNumber(cur).dividedBy(data?.current).multipliedBy(100).toNumber()
+    }
+  }
+
+
   useEffect(() => {
     if (data?.token.toLowerCase() === "near") {
       setTokenDetails(NEAR_OBJECT)
@@ -398,12 +412,55 @@ const SingleEvent = () => {
                   </Avatar>
                 </Center>
                 <Text className={classes.text} align="center" weight={600}>
-                  N/A
+                  {data?.token === "any" ? data?.current_usd : data?.current}
                   &nbsp;
                   {data?.token === "any" ? "USD" : tokenDetails?.symbol}
                 </Text>
               </Stack>
             </Paper>
+
+            <Paper my="md" radius="lg" px="xs" py="xl">
+              <Stack spacing={0}>
+                <Title order={3} className={classes.text} align='center'>Progress</Title>
+                <Center>
+                  <RingProgress
+                    thickness={20}
+                    roundCaps
+                    size={250}
+                    label={
+                      <Stack spacing={0}>
+                        <Text className={classes.text} align='center' size="sm">Target: {data?.target} </Text>
+                        <Text className={classes.text} size="xs" align="center" weight={600} color="green">
+                          {getCurrentPercentage()} % complete
+                        </Text>
+                        <Text className={classes.text} align='center' size="sm">
+                          {data?.token === "any" ? "USD" : tokenDetails?.symbol}
+                        </Text>
+                      </Stack>
+                    }
+                    sections={[
+                      { value: getCurrentPercentage(), color: theme.colors.green[7] },
+                      { value: 100 - getCurrentPercentage(), color: theme.colors.indigo[7] },
+                    ]}
+                  />
+                </Center>
+                <Group position='center'>
+                  <Group align="center" spacing={6}>
+                    <ColorSwatch color={theme.colors.indigo[7]} radius="md" />
+                    <Text size="sm" className={classes.text} >
+                      Target - {data?.target} {data?.token === "any" ? "USD" : tokenDetails?.symbol}
+                    </Text>
+                  </Group>
+                  <Group align="center" spacing={6}>
+                    <ColorSwatch color={theme.colors.green[7]} radius="md" />
+                    <Text size="sm" className={classes.text} >
+                      Current - {data?.token === "any" ? data?.current_usd : getReadableTokenBalance(data?.current, tokenDetails?.decimals)} {data?.token === "any" ? "USD" : tokenDetails?.symbol}
+                    </Text>
+                  </Group>
+                </Group>
+              </Stack>
+            </Paper>
+
           </Grid.Col>
         </Grid>
         <Paper radius="lg" p="xs" my="xl">
@@ -415,8 +472,10 @@ const SingleEvent = () => {
               </Text>
             </Stack>
             <Stack spacing={0}>
-              <Text size="md" className={classes.text} align="end" weight={700}>Total: N/A</Text>
-              <Text size="xs" className={classes.text} align="end">Approximately: N/A</Text>
+              <Text size="md" className={classes.text} align="end" weight={700}>
+                Total: {data?.token === "any" ? data?.current_usd : getReadableTokenBalance(data?.current, tokenDetails?.decimals)} {data?.token === "any" ? "USD" : tokenDetails?.symbol}
+              </Text>
+              <Text size="xs" className={classes.text} align="end">Approximately: {data?.current_usd} </Text>
             </Stack>
           </Group>
           <CampaignDonations category="events" id={eid} />
@@ -424,14 +483,16 @@ const SingleEvent = () => {
         <Paper radius="lg" p="xs" my="xl">
           <Group align="center" position='apart'>
             <Stack spacing={0} mb="md">
-              <Title className={classes.subtitle1} order={4}>Campaing extra information</Title>
+              <Title className={classes.subtitle1} order={4}>Campaign extra information</Title>
               <Text size="sm" className={classes.text}>
                 Extra infor about the event.
               </Text>
             </Stack>
             <Stack spacing={0}>
-              <Text size="md" className={classes.text} align="end" weight={700}>Total: N/A</Text>
-              <Text size="xs" className={classes.text} align="end">Approximately: N/A</Text>
+              <Text size="md" className={classes.text} align="end" weight={700}>
+                Total: {data?.token === "any" ? data?.current_usd : getReadableTokenBalance(data?.current, tokenDetails?.decimals)} {data?.token === "any" ? "USD" : tokenDetails?.symbol}
+              </Text>
+              <Text size="xs" className={classes.text} align="end">Approximately: {data?.current_usd} </Text>
             </Stack>
           </Group>
           <Title order={4}>Partners</Title>

@@ -2,7 +2,8 @@ export const APP_NAME = 'Shift a Life';
 export const SEPARATOR = ' | ';
 export const APP_SEP = APP_NAME + SEPARATOR;
 
-export const CONTRACT = "shiftalife.testnet"
+// export const CONTRACT = "shiftalife.testnet" // Old contract,
+export const CONTRACT = "mvua.testnet"
 
 export const CONTRACT_TOKEN_VIEW_METHODS = []
 
@@ -17,6 +18,7 @@ export const CONTRACT_VIEW_METHODS = [
   "get_tokens",
   "get_campaign_donations",
   "get_event_donations",
+  "get_donations_stats"
 ].concat(CONTRACT_TOKEN_VIEW_METHODS);
 
 export const CONTRACT_TOKEN_CHANGE_METHODS = []

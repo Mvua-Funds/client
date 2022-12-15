@@ -1,12 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { SEPARATOR, APP_NAME } from '../../configs/appconfig'
 import { Helmet } from 'react-helmet';
-import { Grid, Container, Box, Button, Center, Group, Paper, Stack, Title, Image, Text, Pagination } from '@mantine/core';
+import { Grid, Container, Box, Button, Center, Group, Paper, Stack, Title, Image, Text, Pagination, Anchor } from '@mantine/core';
 import CampaignsCustomCalendar from '../../components/calendar/CampaignsCustomCalendar';
 import { getTheme } from '../../configs/appfunctions';
 import bodyStyles from '../../components/styles/bodyStyles';
 import CampaignCard from '../../components/activities/CampaignCard';
 import { ShiftALifeViewFunctionCall } from '../../configs/nearutils';
+import { useScrollIntoView } from '@mantine/hooks';
+import { Link } from 'react-router-dom';
 
 
 const Campaigns = () => {
@@ -19,7 +21,8 @@ const Campaigns = () => {
   const no_of_pages = Math.ceil(count / limit)
 
   const { classes, theme } = bodyStyles()
-
+  const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>({ offset: 120 });
+ 
   const getCampaigns = () => {
     const wallet = window.walletConnection
     if (wallet) {
@@ -78,8 +81,10 @@ const Campaigns = () => {
                   Campaigns are long term activities that we carry out in relation to making donations to help <span className={classes.bold}>Shift a Life</span> of somebody or a community.
                 </Text>
                 <Group mt="xl">
-                  <Button radius="xl" px="xl" color="purple">View all</Button>
+                  <Button radius="xl" px="xl" color="purple" onClick={() => scrollIntoView({ alignment: 'center' })}>View all</Button>
+                  <Anchor to="/create/campaign" component={Link}>
                   <Button radius="xl" px="xl" color="purple" variant="outline">Create Campaign</Button>
+                  </Anchor>
                 </Group>
               </Stack>
             </Box>
@@ -111,7 +116,7 @@ const Campaigns = () => {
         <Group position='right'>
           <Pagination total={no_of_pages} page={page} onChange={page => setPage(page)} />
         </Group>
-        <Grid my="md">
+        <Grid my="md" ref={targetRef}>
           {
             campaigns.map((c: any, i: any) => (
               <Grid.Col md={3} key={`ds_campaign_${c.id}`}>

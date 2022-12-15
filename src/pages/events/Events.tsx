@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { Container, Grid, Box, Stack, Title, Group, Button, Text, Image, Paper, Center, Pagination } from '@mantine/core';
+import { Container, Grid, Box, Stack, Title, Group, Button, Text, Image, Paper, Center, Pagination, Anchor } from '@mantine/core';
 import { Helmet } from 'react-helmet';
 import { SEPARATOR, APP_NAME } from '../../configs/appconfig';
 import bodyStyles from '../../components/styles/bodyStyles';
@@ -8,6 +8,8 @@ import EventsCustomCalendar from '../../components/calendar/EventsCustomCalendar
 
 import EventCard from '../../components/activities/EventCard';
 import { ShiftALifeViewFunctionCall } from '../../configs/nearutils';
+import { useScrollIntoView } from '@mantine/hooks';
+import { Link } from 'react-router-dom';
 
 
 const Events = () => {
@@ -20,6 +22,7 @@ const Events = () => {
   const no_of_pages = Math.ceil(count / limit)
 
   const { classes, theme } = bodyStyles()
+  const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>({ offset: 120 });
 
   const getEvents = () => {
     const wallet = window.walletConnection
@@ -28,7 +31,6 @@ const Events = () => {
         methodName: 'get_events',
         args: { page: page, limit: limit }
       }).then((res: any) => {
-        console.log("Response: ", res)
         const events_ = events
         const results: any = res?.results
         const merged = events_.concat(results).filter((obj: any, index: any, self: any) =>
@@ -80,8 +82,10 @@ const Events = () => {
                   Events are short term activities that we carry out in relation to making donations to help <span className={classes.bold}>Shift a Life</span> of somebody or a community.
                 </Text>
                 <Group mt="xl">
-                  <Button radius="xl" px="xl" color="purple">View all</Button>
+                  <Button radius="xl" px="xl" color="purple" onClick={() => scrollIntoView({ alignment: 'center' })}>View all</Button>
+                  <Anchor to="/create/event" component={Link}>
                   <Button radius="xl" px="xl" color="purple" variant="outline">Create Event</Button>
+                  </Anchor>
                 </Group>
               </Stack>
             </Box>
@@ -112,7 +116,7 @@ const Events = () => {
         <Group position='right'>
           <Pagination total={no_of_pages} page={page} onChange={page => setPage(page)} />
         </Group>
-        <Grid>
+        <Grid ref={targetRef}>
           {
             events.map((c: any, i: any) => (
               <Grid.Col md={3} key={`event_a_${c.id}`}>
