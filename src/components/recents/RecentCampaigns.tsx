@@ -35,7 +35,7 @@ const RecentCampaigns = () => {
             <Stack>
                 <Group position='apart' align="center">
                     <Title order={2} weight={500} className={classes.subtitle}>Recent Campaigns</Title>
-                    <Anchor component={Link} to="/canpaigns">
+                    <Anchor component={Link} to="/campaigns">
                         <Button variant='outline' radius="md" color="indigo" rightIcon={<IconArrowRight />}>View all</Button>
                     </Anchor>
                 </Group>
