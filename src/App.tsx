@@ -1,5 +1,5 @@
 import { ThemeProvider } from "./ThemeProvider";
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 
 import AppWrapper from "./layouts/AppWrapper";
 
@@ -15,12 +15,20 @@ import BecomePartner from "./pages/partners/BecomePartner";
 import SingleEvent from './pages/events/SingleEvent';
 import SingleCampaign from './pages/campaigns/SingleCampaign';
 import TokenImport from "./pages/TokenImport";
+import { useScrollIntoView } from "@mantine/hooks";
 
 export default function App() {
 
+  // const location = useLocation()
+  // const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>({ offset: 60 });
+  // useEffect(() => {
+  //   scrollIntoView();
+  // }, [location])
+
   return (
-    <ThemeProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider>
+        {/* <div ref={targetRef}></div> */}
         <AppWrapper>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -36,7 +44,11 @@ export default function App() {
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </AppWrapper>
-      </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
+function useEffect(arg0: () => void, arg1: import("react-router-dom").Location[]) {
+  throw new Error("Function not implemented.");
+}
+

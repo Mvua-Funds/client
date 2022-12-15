@@ -17,6 +17,7 @@ import { v4 } from 'uuid';
 //firebase imports
 import { storage } from '../../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 
 const CreateEvent = () => {
@@ -31,6 +32,7 @@ const CreateEvent = () => {
   const [img, setImg] = useState<any>(null)
 
   const theme = useMantineTheme()
+  const navigate = useNavigate()
 
   const loadCauses = () => {
     getCauses().then((res: any) => {
@@ -85,17 +87,25 @@ const CreateEvent = () => {
     const month = date?.getMonth()
     const day = date?.getDate()
 
+    const id = nanoid() + Date.now();
     let data = {
       ...form.values,
       date: date?.toString(),
       dates: `${year},${month},${day}`,
       created_by: account,
       img: img,
-      id: nanoid() + Date.now(),
+      id: id,
       token: selectedToken.address,
     }
     const wallet = window.walletConnection
     const contract = window?.contract
+    if(img === null){
+      showNotification({
+        message: "Select an image",
+        color: "red"
+      })
+      return
+    }
     if (contract) {
       setLoading(true)
       ShiftALifeFunctionCall(wallet, {
@@ -111,6 +121,7 @@ const CreateEvent = () => {
           icon: <IconCheck />
         })
         form.reset()
+        navigate(`/events/${id}`)
       }).catch((e: any) => {
         console.error("Error: ", e)
         showNotification({

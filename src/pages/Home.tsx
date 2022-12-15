@@ -67,7 +67,39 @@ const Home = () => {
             {/* Welcoming block */}
             <Container size="lg" className='custom-mb'>
                 <Grid>
-                    <Grid.Col md={6}></Grid.Col>
+                    <Grid.Col md={6} className="fixed-height">
+                        <Box className='h-100' sx={{
+                            position: "relative",
+                            ".img1": {
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: "70% !important",
+                                aspectRatio: "16 / 9",
+                                zIndex: 2,
+                            },
+                            ".img2": {
+                                position: "absolute",
+                                top: "20%",
+                                right: 0,
+                                width: "80% !important",
+                                aspectRatio: "16 / 9",
+                                zIndex: 2,
+                            },
+                            ".img3": {
+                                position: "absolute",
+                                bottom: 0,
+                                left: 0,
+                                width: "80% !important",
+                                aspectRatio: "16 / 9",
+                                zIndex: 2,
+                            },
+                        }}>
+                            <Image src="/home/img1.jpeg" radius="lg" className="img1" />
+                            <Image src="/home/img2.jpeg" radius="lg" className="img2" />
+                            <Image src="/home/img3.jpeg" radius="lg" className="img3" />
+                        </Box>
+                    </Grid.Col>
                     <Grid.Col md={6}>
                         <Stack>
                             <Title className={classes.subtitle}>How are we making a difference</Title>

@@ -62,15 +62,21 @@ const Footer = () => {
                         <Grid.Col md={4}>
                             <Title className={classes.text} order={2} mb="lg" weight={500}>Find us through</Title>
                             <Group>
-                                <ActionIcon variant='light' size="lg" color="indigo">
-                                    <IconBrandFacebook color={getTheme(theme) ? theme.white : "#242a49"} />
-                                </ActionIcon>
-                                <ActionIcon variant='light' size="lg" color="indigo" >
-                                    <IconBrandTwitter color={getTheme(theme) ? theme.white : "#242a49"} />
-                                </ActionIcon>
-                                <ActionIcon variant='light' size="lg" color="indigo" >
-                                    <IconBrandLinkedin color={getTheme(theme) ? theme.white : "#242a49"} />
-                                </ActionIcon>
+                                <Anchor href='https://www.facebook.com/livesoftwaredeveloper/'>
+                                    <ActionIcon variant='light' size="lg" color="indigo">
+                                        <IconBrandFacebook color={getTheme(theme) ? theme.white : "#242a49"} />
+                                    </ActionIcon>
+                                </Anchor>
+                                <Anchor href='https://twitter.com/LiveSoftwareDev/'>
+                                    <ActionIcon variant='light' size="lg" color="indigo" >
+                                        <IconBrandTwitter color={getTheme(theme) ? theme.white : "#242a49"} />
+                                    </ActionIcon>
+                                </Anchor>
+                                <Anchor href='https://www.linkedin.com/company/76145963/'>
+                                    <ActionIcon variant='light' size="lg" color="indigo" >
+                                        <IconBrandLinkedin color={getTheme(theme) ? theme.white : "#242a49"} />
+                                    </ActionIcon>
+                                </Anchor>
                             </Group>
                             <Box my="xl" py="xl">
                                 <Stack spacing={6}>

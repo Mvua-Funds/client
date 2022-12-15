@@ -19,6 +19,7 @@ import { v4 } from 'uuid';
 //firebase imports
 import { storage } from '../../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { useNavigate } from 'react-router-dom';
 
 
 const CreateCampaign = () => {
@@ -32,6 +33,7 @@ const CreateCampaign = () => {
   const [img, setImg] = useState<any>(null)
 
   const theme = useMantineTheme()
+  const navigate = useNavigate()
 
   const loadCauses = () => {
     getCauses().then((res: any) => {
@@ -93,6 +95,7 @@ const CreateCampaign = () => {
     const e_month = end_date?.getMonth()
     const e_day = end_date?.getDate()
 
+    const id =  nanoid() + Date.now()
     let data = {
       ...form.values,
       start_date: start_date?.toString(),
@@ -101,13 +104,20 @@ const CreateCampaign = () => {
       end_dates: `${e_year},${e_month},${e_day}`,
       created_by: account,
       img: img,
-      id: nanoid() + Date.now(),
+      id:id,
       token: selectedToken.address,
     }
 
     setLoading(true)
     const wallet = window.walletConnection
     const contract = window?.contract
+    if(img === null){
+      showNotification({
+        message: "Select an image",
+        color: "red"
+      })
+      return
+    }
     if (contract) {
       ShiftALifeFunctionCall(wallet, {
         methodName: "create_campaign",
@@ -123,6 +133,7 @@ const CreateCampaign = () => {
         })
         form.reset()
         setImg(null)
+        navigate(`/campaigns/${id}`)
       }).catch((e: any) => {
         console.error("Error: ", e)
         showNotification({

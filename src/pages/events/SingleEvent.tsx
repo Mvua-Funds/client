@@ -291,8 +291,11 @@ const SingleEvent = () => {
                   borderRadius: theme.radius.lg,
                 }} />
               <Paper p="xs" radius="lg" my="md">
+                Cause: {data?.cause}
+              </Paper>
+              <Paper p="xs" radius="lg" my="md">
                 <Text className={classes.text} p="xs" sx={{
-                  whiteSpace: "pre"
+                  whiteSpace: "pre-wrap"
                 }}>
                   {data?.description}
                 </Text>
